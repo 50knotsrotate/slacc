@@ -21,6 +21,7 @@ create table channels
 (
     id serial primary key,
     owner integer references users(id),
+    name varchar(25) not null,
     team_id integer references teams(id)
 );
 
