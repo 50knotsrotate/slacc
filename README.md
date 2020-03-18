@@ -41,4 +41,5 @@
 
 #### I think that may be good enough for now
 
-
+#### I have decided to use massive.js to handle my SQL queries. ```npm install massive```
+#### Now I just have to write my queries.

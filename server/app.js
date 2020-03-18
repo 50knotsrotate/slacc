@@ -18,6 +18,8 @@ var io = require("socket.io").listen(server);
 
 // The server should start listening
 server.listen(80);
+console.log('server started')
+
 
 // Register the index route of your app that returns the HTML file
 app.get("*", function(_req, res) {
