@@ -76,3 +76,5 @@ channel_id integer references chan;nels(id)
 );
 ```
 #### I went ahead and also created a super simple bootstrap layout. I will come back to redesign it, but I just want something somewhat nice to look at while I build this thing out. Now I can go ahead and setup 0auth, because I have setup custom authentication before, and I just want to try something new.
+
+#### UPDATE: Okay, I am actually NOT going to implement signing in with google. Appearently, my app now has to be verified by google, which could take weeks. I am instead going to find another way to authorize users.. time to do some research!
