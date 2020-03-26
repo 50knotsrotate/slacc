@@ -24,7 +24,7 @@ class App extends React.Component {
             </Navbar.Text>
           </Navbar.Collapse>
         </Navbar>
-        <Container className = 'mb-5'>
+        <Container className="mb-5">
           <Row>
             <Col sm={12} lg={6}>
               <h4>DUMMY TEXT</h4>
@@ -34,7 +34,12 @@ class App extends React.Component {
                   Officia, maiores.
                 </b>
               </h1>
-              <p className="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam ad odio perferendis nam eveniet in fuga provident nihil, voluptatem repudiandae? Exercitationem neque aspernatur repudiandae esse voluptate! Ut dolorum placeat impedit!</p>
+              <p className="lead">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Quibusdam ad odio perferendis nam eveniet in fuga provident
+                nihil, voluptatem repudiandae? Exercitationem neque aspernatur
+                repudiandae esse voluptate! Ut dolorum placeat impedit!
+              </p>
               <Button className="mr-2" variant="primary" size="lg">
                 Button
               </Button>
@@ -46,17 +51,24 @@ class App extends React.Component {
               </p>
             </Col>
             <Col sm={12} lg={6}>
-              <Image
-                src="https://www.gmtsworkwear.com/wp-content/uploads/2014/04/CSW.jpg"
-                className="h-100 w-100"
-              />
+              <div style={{ backgroundImage: 'url(https://www.gmtsworkwear.com/wp-content/uploads/2014/04/CSW.jpg)', width: '100%', height: '100%' }}>
+                {/* Had to put the image in a div like this because the bootstrp Image component overflows its container. Quick fix. */}
+                {/* <Image
+                  src="https://www.gmtsworkwear.com/wp-content/uploads/2014/04/CSW.jpg"
+                /> */}
+              </div>
             </Col>
           </Row>
         </Container>
-        <Jumbotron bg = 'dark' variant = 'dark ' className = 'text-center'>
-          <h1 className = 'mb-3'>Sign Up For More Stuff</h1>
+        <Jumbotron bg="dark" variant="dark " className="text-center">
+          <h1 className="mb-3">Sign Up For More Stuff</h1>
           <Form.Group>
-            <Form.Control size = 'lg' type = 'email' placeholder = 'Email' className = 'w-25 mx-auto' />
+            <Form.Control
+              size="lg"
+              type="email"
+              placeholder="Email"
+              className="w-25 mx-auto"
+            />
           </Form.Group>
         </Jumbotron>
         <Container className="text-center my-5">
@@ -67,7 +79,10 @@ class App extends React.Component {
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Doloribus,
             consequatur.
           </p>
-          <Image src='https://i.ytimg.com/vi/0_yT0iSG0l0/maxresdefault.jpg' style={{width: '100%', margin: '0 auto;'}}/>
+          <Image
+            src="https://i.ytimg.com/vi/0_yT0iSG0l0/maxresdefault.jpg"
+            style={{ width: "100%", margin: "0 auto;" }}
+          />
         </Container>
       </React.Fragment>
     );
