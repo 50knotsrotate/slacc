@@ -4,6 +4,7 @@ var http = require("http");
 var express = require("express");
 var app = express();
 var massive = require('massive');
+var bcrypt = require('bcryptjs');
 
 //Need this only to resolve the path of the build folder, which lives up one directory
 var path = require('path');
@@ -36,12 +37,18 @@ console.log('server started')
 app.post('/signup', function (req, res) {
   const db = req.app.get('db');
   const { username, password } = req.body;
-  db.create_user(username, password)
-    .then(user => { 
-      res.status(200).send(user)
-    }).catch(err => { 
-      res.status(500).send(err)
-    })
+  const saltRounds = 10; 
+  bcrypt.genSalt(saltRounds, function (err, salt) {
+    bcrypt.hash(password, salt, function (err, hash) {
+        db.create_user(username, hash)
+          .then(user => {
+            res.status(200).send(user);
+          })
+          .catch(err => {
+            res.status(500).send(err);
+          });
+     })
+   })
 });
 
 // Register the index route of your app that returns the HTML file
