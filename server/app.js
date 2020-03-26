@@ -34,22 +34,39 @@ massive(CONNECTION_STRING)
 server.listen(80);
 console.log('server started')
 
-app.post('/signup', function (req, res) {
+app.post('/signup', function (req, res, next) {
   const db = req.app.get('db');
   const { username, password } = req.body;
   const saltRounds = 10; 
   bcrypt.genSalt(saltRounds, function (err, salt) {
+    if (err) { 
+      const error = new Error('Error creating new user')
+      error.statusCode = 500;
+      return next(error)
+    }
     bcrypt.hash(password, salt, function (err, hash) {
+      if (err) { 
+         const error = new Error("Error creating new user");
+         error.statusCode = 500;
+         return next(error);
+      }
         db.create_user(username, hash)
           .then(user => {
             res.status(200).send(user);
           })
           .catch(err => {
-            res.status(500).send(err);
+            const error = new Error(err.detail);
+            error.statusCode = 500;
+            return next(error);
           });
      })
    })
 });
+
+//Error handler
+app.use(function (err, req, res, next) {
+  return res.status(err.statusCode || 500).send(err.message || 'Internal Server Error')
+ })
 
 // Register the index route of your app that returns the HTML file
 app.get("*", function(_req, res) {
