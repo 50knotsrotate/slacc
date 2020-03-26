@@ -13,6 +13,9 @@ const { CONNECTION_STRING } = process.env;
 //Using this for exposing the build folder to the client, which is where the finished HTML CSS and JS will live
 app.use(express.static(`${__dirname}/../build`));
 
+// For parsing body of incoming post requests
+app.use(express.json())
+
 
 var server = http.createServer(app);
 
@@ -30,6 +33,9 @@ massive(CONNECTION_STRING)
 server.listen(80);
 console.log('server started')
 
+app.post('/signup', function (req, res) {
+    // Handle signup
+});
 
 // Register the index route of your app that returns the HTML file
 app.get("*", function(_req, res) {
