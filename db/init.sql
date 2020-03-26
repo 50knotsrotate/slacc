@@ -6,14 +6,14 @@ drop table if exists users;
 create table users
 (
     id serial primary key,
-    username varchar(25) not null,
+    username varchar(25) not null UNIQUE,
     password varchar(250) not null
 );
 
 create table teams
 (
     id serial primary key,
-    name varchar(25) not null,
+    name varchar(25) not null UNIQUE,
     owner integer references users(id)
 );
 
