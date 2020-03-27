@@ -35,47 +35,6 @@ massive(CONNECTION_STRING)
 server.listen(80);
 console.log("server started");
 
-// app.post("/signup", function(req, res, next) {
-//   // Get the DB
-//   const db = req.app.get("db");
-
-//   // Get username and password
-//   const { username, password } = req.body;
-
-//   // Set salt rounds for hashing password
-//   const saltRounds = 10;
-
-//   bcrypt.hash(password, salt, function (err, hash) {
-//     // If there was an error hashing the password, forward this to the error handler
-//     if (err) {
-//       const error = new Error("Error creating new user");
-//       error.statusCode = 500;
-//       return next(error);
-//     }
-
-//     db.create_user(username, hash)
-//       .then(user => {
-//         var secret =
-//           "aTk0M3F5NXR1Zzh3cmlwZXN0amYyOTgzNHdpb1tldTVyanFmY2lwcmVkeGdudnJtY2llYWsnd2x3"; //Change this & store in .env
-//         var { id } = user[0];
-//         jwt.sign({ id }, secret, (err, token) => {
-//           if (err) {
-//             return next(err);
-//           }
-
-//           return res.json({
-//             token
-//           });
-//         });
-//       })
-//       .catch(err => {
-//         const error = new Error(err.detail);
-//         error.statusCode = 500;
-//         return next(error);
-//       });
-//   });
-// });
-
 app.post("/signup", async (req, res, next) => {
   try {
     const db = req.app.get("db");
