@@ -82,6 +82,14 @@ app.post("/signup", async (req, res, next) => {
 
     const { username, password } = req.body;
 
+    // Quick check. Can do better than this!
+    if (!username || !password) { 
+      throw {
+        message: 'Please provide proper username and password',
+        statusCode: 400
+      }
+    }
+
     const isUniqueUsername = await db.find_user(username).length === 0;
 
     // If the username is not unique, throw the error, which will be handled by the error handler
