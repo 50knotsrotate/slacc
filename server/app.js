@@ -7,6 +7,7 @@ var massive = require("massive");
 var jwt = require("jsonwebtoken");
 var path = require("path");
 
+// Sign in middlewares
 const checkFormComplete = require('./middleware/checkFormComplete');
 const checkUniqueUsername = require('./middleware/checkUniqueUsername');
 const saveUser = require('./middleware/saveUser');
