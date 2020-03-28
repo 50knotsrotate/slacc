@@ -1,3 +1,9 @@
+/* 
+    ROUTE(S): POST /signup
+    PURPOSE: This function hashes a username and issues a JWT. This should always be the last middleware
+    for POST /signup
+
+*/
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
