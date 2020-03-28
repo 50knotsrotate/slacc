@@ -7,7 +7,7 @@
              and a password must be at least 8 characters. The REGEX for these are provided in this file.
 */
 
-export default function(req, res, next) {
+function checkFormComplete(req, res, next) {
   const { username, password } = req.body;
 
   const usernameRegex = /^[A-Za-z][A-Za-z0-9]{5,31}$/;
@@ -18,6 +18,7 @@ export default function(req, res, next) {
     https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a
 */
 
+  // Minimum eight characters, at least one letter and one number:
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
   const isValidUsername = usernameRegex.test(username);
@@ -36,3 +37,5 @@ export default function(req, res, next) {
     return next(err);
   }
 }
+
+module.exports = checkFormComplete;

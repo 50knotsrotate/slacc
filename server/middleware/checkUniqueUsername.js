@@ -11,7 +11,7 @@
     Ew.
 */
 
-export default function(req, res, next) {
+function checkUniqueUsername(req, res, next) {
   const db = req.app.get("db");
 
   const { username, password } = req.body;
@@ -23,12 +23,14 @@ export default function(req, res, next) {
   */
 
   db.find_user(username).then(user => {
-      if (user.length) {
-          const err = new Error("User with that username already exists");
-          err.statusCode = 400; // TODO: More appropriate error code
-          return next(err);
-      } else {
-          next();
-       }
+    if (user.length) {
+      const err = new Error("User with that username already exists");
+      err.statusCode = 400; // TODO: More appropriate error code
+      return next(err);
+    } else {
+      next();
+    }
   });
-};
+}
+
+module.exports = checkUniqueUsername;

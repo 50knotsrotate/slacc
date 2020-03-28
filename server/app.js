@@ -4,11 +4,13 @@ var http = require("http");
 var express = require("express");
 var app = express();
 var massive = require("massive");
-var bcrypt = require("bcryptjs");
 var jwt = require("jsonwebtoken");
-
-//Need this only to resolve the path of the build folder, which lives up one directory
 var path = require("path");
+
+const checkFormComplete = require('./middleware/checkFormComplete');
+const checkUniqueUsername = require('./middleware/checkUniqueUsername');
+const saveUser = require('./middleware/saveUser');
+const issueToken = require('./middleware/issueToken');
 
 const { CONNECTION_STRING } = process.env;
 
@@ -35,74 +37,7 @@ massive(CONNECTION_STRING)
 server.listen(80);
 console.log("server started");
 
-app.post("/signup", async (req, res, next) => {
-  try {
-    const db = req.app.get("db");
-
-    const { username, password } = req.body;
-
-    // Quick check. Can do better than this!
-    if (!username || !password) { 
-      throw {
-        message: 'Please provide proper username and password',
-        statusCode: 400
-      }
-    }
-
-    const isUniqueUsername = await db.find_user(username).length === 0;
-
-    // If the username is not unique, throw the error, which will be handled by the error handler
-    if (isUniqueUsername) {
-      throw {
-        message: 'User with that username already exists',
-        statusCode: 400 // TODO: Find more approprite status code
-      }
-    }
-
-    // Create user record
-    const salt = 10;
-
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    const newUser = await db.create_user(username, hashedPassword);
-
-    // End create user record
-
-    // JWT configuration
-    const secret = "aTk0M3F5NXR1Zzh3cmlwZXN0amYyOTgzNHdpb1tldTVyanFmY2lwcmVkeGdudnJtY2llYWsnd2x3"; //Change this and put in .env
-
-    const iat = Date.now() / 1000;
-
-    const jwtid = Math.random().toString(36).substring(7) // Copied from https://www.js-tutorials.com/nodejs-tutorial/user-authentication-using-jwt-json-web-token-node-js/
-
-    const audience = 'test'
-
-    const data = newUser[0].id;
-
-    const payload = {
-      iat,
-      jwtid,
-      audience,
-      data
-    };
-
-    const options = {
-      algorithm: 'HS256',
-      expiresIn: '1h'
-    }
-
-    // End JWT config
-
-    // Get the token and send to user
-    const token = jwt.sign(payload, secret, options);
-    
-    return res.status(200).send(token);
-
-  } catch (error) {
-
-    return next(error);
-  }
-});
+app.post("/signup", checkFormComplete, checkUniqueUsername, saveUser, issueToken);
 
 //Error handler
 app.use(function(err, req, res, next) {
