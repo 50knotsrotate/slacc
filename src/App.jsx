@@ -2,28 +2,37 @@
 import * as React from "react";
 import "./App.css";
 import io from "socket.io-client";
-import Navbar from "react-bootstrap/Navbar";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Button from "react-bootstrap/Button";
-import Image from 'react-bootstrap/Image'
-import Form from 'react-bootstrap/Form'
+import Image from "react-bootstrap/Image";
+import Form from "react-bootstrap/Form";
+import SignUp from "./components/Modals/SignUp/SignUp";
+
+import Navbar from './components/Navbar/Navbar';
 
 class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      showModal: false
+    };
+  }
+
+  toggleModal = () => {
+    this.setState({
+      showModal: !this.state.toggleModal
+    })
+  };
+
   render() {
     return (
       <React.Fragment>
-        <Navbar bg="dark" variant="dark" className="mb-5">
-          <Navbar.Brand href="#home">Slacc</Navbar.Brand>
-          <Navbar.Toggle />
-          <Navbar.Collapse className="justify-content-end">
-            <Navbar.Text>
-              <a href="#login">Sign Up</a>
-            </Navbar.Text>
-          </Navbar.Collapse>
-        </Navbar>
+        <Navbar
+          toggleModal={this.toggleModal}
+        />
         <Container className="mb-5">
           <Row>
             <Col sm={12} lg={6}>
@@ -51,7 +60,14 @@ class App extends React.Component {
               </p>
             </Col>
             <Col sm={12} lg={6}>
-              <div style={{ backgroundImage: 'url(https://www.gmtsworkwear.com/wp-content/uploads/2014/04/CSW.jpg)', width: '100%', height: '100%' }}>
+              <div
+                style={{
+                  backgroundImage:
+                    "url(https://www.gmtsworkwear.com/wp-content/uploads/2014/04/CSW.jpg)",
+                  width: "100%",
+                  height: "100%"
+                }}
+              >
                 {/* Had to put the image in a div like this because the bootstrp Image component overflows its container. Quick fix. */}
                 {/* <Image
                   src="https://www.gmtsworkwear.com/wp-content/uploads/2014/04/CSW.jpg"
@@ -84,6 +100,9 @@ class App extends React.Component {
             style={{ width: "100%", margin: "0 auto;" }}
           />
         </Container>
+
+        <SignUp show={this.state.showModal} />
+        
       </React.Fragment>
     );
   }
