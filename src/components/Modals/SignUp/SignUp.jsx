@@ -5,6 +5,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 
+import "./SignUp.css";
+
 export default class SignUp extends Component {
   constructor(props) {
     super(props);
@@ -25,13 +27,23 @@ export default class SignUp extends Component {
   };
 
   submitForm = e => {
-      this.setState({
-          submitting: true
-      })
+    this.setState({
+      submitting: true
+    });
   };
 
   toggleFormType = () => {
-    alert("yoooo");
+    if (this.state.authType === "Sign Up") {
+      this.setState({
+        authType: "Sign In",
+        submitUrl: "/signin"
+      });
+    } else {
+      this.setState({
+        authType: "Sign Up",
+        submitUrl: "/signup"
+      });
+    }
   };
 
   render() {
@@ -46,6 +58,28 @@ export default class SignUp extends Component {
           <Modal.Header closeButton>
             <Modal.Title id="contained-modal-title-vcenter">
               {this.state.authType}
+
+              {this.state.authType === "Sign Up" ? (
+                <p class="lead text-muted">
+                  Already have an account ?{" "}
+                  <span
+                    className="btn btn-sm btn-light"
+                    onClick={this.toggleFormType}
+                  >
+                    Log In
+                  </span>
+                </p>
+              ) : (
+                <p class="lead text-muted">
+                  Need to make an account?{" "}
+                  <span
+                    className="btn btn-sm btn-light"
+                    onClick={this.toggleFormType}
+                  >
+                    Sign Up
+                  </span>
+                </p>
+              )}
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
@@ -75,17 +109,19 @@ export default class SignUp extends Component {
                     onChange={e => this.handleInput(e)}
                     name="password"
                   />
-                  <p class="text-muted">
-                    * Must contain at least 8 characters and one number.
-                  </p>
+                  {this.state.authType === "Sign Up" && (
+                    <p style={{ cursor: "pointer" }} class="text-muted">
+                      * Must contain at least 8 characters and one number.
+                    </p>
+                  )}
                 </Col>
               </Form.Group>
             </Form>
           </Modal.Body>
           <Modal.Footer>
-                    <Button onClick={e => this.submitForm(e)}>
-                        {this.state.submitting ? 'Please wait :)' : 'Submit'}
-                        </Button>
+            <Button onClick={e => this.submitForm(e)}>
+              {this.state.submitting ? "Please wait :)" : "Submit"}
+            </Button>
           </Modal.Footer>
         </Modal>
       </React.Fragment>
