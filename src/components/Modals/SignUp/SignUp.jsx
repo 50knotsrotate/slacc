@@ -1,4 +1,4 @@
-        /* tslint:disable */
+/* tslint:disable */
 import React, { Component } from "react";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
@@ -38,16 +38,16 @@ export default class SignUp extends Component {
 
     axios
       .post(this.state.submitUrl, { username, password })
-        .then(res => {
-            const { token } = res.data;   
-            if (token) {
-            // Save in local storage and find a way to send the token with each request.
-                alert(token)
-            };
-          
+      .then(res => {
+        const { token } = res.data;
+        if (token) {
+          window.localStorage.setItem("token", token);
+          // Save in local storage and find a way to send the token with each request.
+          // alert(token)
+        }
       })
-        .catch(err => {
-            alert(err.response.data)
+      .catch(err => {
+        alert(err.response.data);
       });
   };
 
