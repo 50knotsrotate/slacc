@@ -1,9 +1,12 @@
+        /* tslint:disable */
 import React, { Component } from "react";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
+
+const axios = require("axios");
 
 import "./SignUp.css";
 
@@ -14,7 +17,7 @@ export default class SignUp extends Component {
     this.state = {
       authType: "Sign Up",
       password: "",
-      submitUrl: "/signup",
+      submitUrl: "http://localhost:80/signup",
       submitting: false,
       username: ""
     };
@@ -27,21 +30,36 @@ export default class SignUp extends Component {
   };
 
   submitForm = e => {
+    const { username, password } = this.state;
+
     this.setState({
       submitting: true
     });
+
+    axios
+      .post(this.state.submitUrl, { username, password })
+        .then(res => {
+        const { token } = res.data;
+        if (token) {
+          alert(token);
+          } 
+          
+      })
+      .catch(message => {
+        console.log(message);
+      });
   };
 
   toggleFormType = () => {
     if (this.state.authType === "Sign Up") {
       this.setState({
         authType: "Sign In",
-        submitUrl: "/signin"
+        submitUrl: "/http://localhost:80/signin"
       });
     } else {
       this.setState({
         authType: "Sign Up",
-        submitUrl: "/signup"
+        submitUrl: "http://localhost:80/signup"
       });
     }
   };
@@ -119,8 +137,14 @@ export default class SignUp extends Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button onClick={e => this.submitForm(e)}>
-              {this.state.submitting ? "Please wait :)" : "Submit"}
+            <Button>
+              {this.state.submitting ? (
+                "Please wait :)"
+              ) : (
+                <span className="lead" onClick={this.submitForm}>
+                  Submit
+                </span>
+              )}
             </Button>
           </Modal.Footer>
         </Modal>
