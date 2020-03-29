@@ -48,12 +48,20 @@ app.post(
   issueToken
 );
 
+// Not found
+app.use(function (req, res, next) {
+  const err = new Error('Page not found :(');
+  err.statusCode = 404;
+  return next(err)
+});
+
 //Error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
+  console.log('err')
+  console.log(err)
   return res
     .status(err.statusCode || 500)
-    .json({ message: err.message || "Internal Server Error" })
-    .send();
+    .send({ message: err.message || "Internal Server Error" })
 });
 
 // Register the index route of your app that returns the HTML file

@@ -39,14 +39,15 @@ export default class SignUp extends Component {
     axios
       .post(this.state.submitUrl, { username, password })
         .then(res => {
-        const { token } = res.data;
-        if (token) {
-          alert(token);
-          } 
+            const { token } = res.data;   
+            if (token) {
+            // Save in local storage and find a way to send the token with each request.
+                alert(token)
+            };
           
       })
-      .catch(message => {
-        console.log(message);
+        .catch(err => {
+            alert(err.response.data)
       });
   };
 
