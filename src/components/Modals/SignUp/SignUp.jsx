@@ -42,15 +42,16 @@ export default class SignUp extends Component {
       .then(res => {
         const { token } = res.data;
         if (token) {
+          alert(token);
           window.localStorage.setItem("token", token);
-          }
-          this.props.push('/home')
+        }
+        this.props.push("/home");
       })
       .catch(err => {
-          this.setState({
-              errorMessage: err.response.data.message,
-              submitting: false
-          })
+        this.setState({
+          errorMessage: err.response.data.message,
+          submitting: false
+        });
       });
   };
 
@@ -58,11 +59,12 @@ export default class SignUp extends Component {
     if (this.state.authType === "Sign Up") {
       this.setState({
         authType: "Sign In",
-        submitUrl: "/http://localhost:80/signin"
+        submitUrl: "http://localhost:80/signin",
+        errorMessage: null
       });
     } else {
       this.setState({
-        authType: "Sign Up",
+        authType: "Sign In",
         submitUrl: "http://localhost:80/signup"
       });
     }

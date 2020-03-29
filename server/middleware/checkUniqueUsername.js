@@ -14,7 +14,7 @@
 function checkUniqueUsername(req, res, next) {
   const db = req.app.get("db");
 
-  const { username, password } = req.body;
+  const { username } = req.body;
 
   /* 
     If the DB is queried for a user record with the provided username, 
