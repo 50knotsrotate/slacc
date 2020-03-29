@@ -9,7 +9,7 @@ export default function NavBar(props) {
       <Navbar.Toggle />
       <Navbar.Collapse className="justify-content-end">
         <Navbar.Text>
-          <a onClick={props.toggleModal} href="#login">
+          <a onClick={props.toggleModal}>
             Sign Up / Login
           </a>
         </Navbar.Text>
