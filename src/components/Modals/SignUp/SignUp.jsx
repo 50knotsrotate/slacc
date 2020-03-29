@@ -19,7 +19,8 @@ export default class SignUp extends Component {
       password: "",
       submitUrl: "http://localhost:80/signup",
       submitting: false,
-      username: ""
+      username: "",
+      errorMessage: null
     };
   }
 
@@ -42,12 +43,13 @@ export default class SignUp extends Component {
         const { token } = res.data;
         if (token) {
           window.localStorage.setItem("token", token);
-          // Save in local storage and find a way to send the token with each request.
-          // alert(token)
         }
       })
       .catch(err => {
-        alert(err.response.data);
+          this.setState({
+              errorMessage: err.response.data.message,
+              submitting: false
+          })
       });
   };
 
@@ -77,7 +79,6 @@ export default class SignUp extends Component {
           <Modal.Header closeButton>
             <Modal.Title id="contained-modal-title-vcenter">
               {this.state.authType}
-
               {this.state.authType === "Sign Up" ? (
                 <p class="lead text-muted">
                   Already have an account ?{" "}
@@ -97,6 +98,11 @@ export default class SignUp extends Component {
                   >
                     Sign Up
                   </span>
+                </p>
+              )}
+              {this.state.errorMessage && (
+                <p style={{ color: "red" }} class="lead p-0 m-0">
+                  {this.state.errorMessage}
                 </p>
               )}
             </Modal.Title>
@@ -137,6 +143,7 @@ export default class SignUp extends Component {
               </Form.Group>
             </Form>
           </Modal.Body>
+
           <Modal.Footer>
             <Button>
               {this.state.submitting ? (
