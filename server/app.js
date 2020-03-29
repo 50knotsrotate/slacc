@@ -6,20 +6,22 @@ var app = express();
 var massive = require("massive");
 var jwt = require("jsonwebtoken");
 var path = require("path");
+var cors = require("cors");
 
 // Sign in middlewares
-const checkFormComplete = require('./middleware/checkFormComplete');
-const checkUniqueUsername = require('./middleware/checkUniqueUsername');
-const saveUser = require('./middleware/saveUser');
-const issueToken = require('./middleware/issueToken');
+const checkFormComplete = require("./middleware/checkFormComplete");
+const checkUniqueUsername = require("./middleware/checkUniqueUsername");
+const saveUser = require("./middleware/saveUser");
+const issueToken = require("./middleware/issueToken");
 
 const { CONNECTION_STRING } = process.env;
-
 //Using this for exposing the build folder to the client, which is where the finished HTML CSS and JS will live
 app.use(express.static(`${__dirname}/../build`));
 
 // For parsing body of incoming post requests
 app.use(express.json());
+
+app.use(cors());
 
 var server = http.createServer(app);
 
@@ -38,13 +40,28 @@ massive(CONNECTION_STRING)
 server.listen(80);
 console.log("server started");
 
-app.post("/signup", checkFormComplete, checkUniqueUsername, saveUser, issueToken);
+app.post(
+  "/signup",
+  checkFormComplete,
+  checkUniqueUsername,
+  saveUser,
+  issueToken
+);
+
+// Not found
+app.use(function (req, res, next) {
+  const err = new Error('Page not found :(');
+  err.statusCode = 404;
+  return next(err)
+});
 
 //Error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
+  console.log('err')
+  console.log(err)
   return res
     .status(err.statusCode || 500)
-    .json({ message: err.message || "Internal Server Error" });
+    .send({ message: err.message || "Internal Server Error" })
 });
 
 // Register the index route of your app that returns the HTML file

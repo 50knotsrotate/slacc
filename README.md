@@ -163,11 +163,14 @@ app.post("/signup", async (req, res, next) => {
     // End create user record
 
     // JWT configuration
-    const secret = "aTk0M3F5NXR1Zzh3cmlwZXN0amYyOTgzNHdpb1tldTVyanFmY2lwcmVkeGdudnJtY2llYWsnd2x3"; //Change this and put in .env
+    const secret =
+      "aTk0M3F5NXR1Zzh3cmlwZXN0amYyOTgzNHdpb1tldTVyanFmY2lwcmVkeGdudnJtY2llYWsnd2x3"; //Change this and put in .env
 
     const iat = Date.now() / 1000;
 
-    const jwtid = Math.random().toString(36).substring(7);
+    const jwtid = Math.random()
+      .toString(36)
+      .substring(7);
 
     const audience = "test";
 
@@ -196,3 +199,53 @@ app.post("/signup", async (req, res, next) => {
   }
 });
 ```
+
+## Uh oh! I've run into a problem that I cant seem to figure out.
+
+#### I've done a bit of work on the signup page by now, and I've tested my POST /signup route in postman several times and have been getting back correct error messages and status codes for each of the "sign in stories" I can think of. (Username taken, invalid input, incorerct password pattern etc), but I'm not getting the error back when tested in the browser. I just get a default "400" code with none of my custom error messages. When I make POST to /signup with everything in order, I get the token back as planned, but I'm not getting the error messages. I'm suspecting that this has something to do with my error handler.
+
+#### \*_Pulls out rubber duck_ \*
+
+#### This is my error handler
+
+```javascript
+app.use(function (err, req, res, next) {
+  return res
+    .status(err.statusCode || 500)
+    .send({ message: err.message || "Internal Server Error" }))
+});
+
+```
+
+#### I just want to take the error that was passed and send it back to the browser with either a custom error message for errors I anticipated, and a generic 500 internal serer error when something that I did NOT anticipate happens. So, for example, when I try to POST an empty form to /signup, I want the response to the browser to be: 
+
+```javascript 
+{
+    "message": "Please check username and password requirments and try again"
+}
+```
+#### But its not. I even console.logged the error in the server RIGHT before its sent to the browser, and I get exactly what I am looking for... but when I actually want to read that error in the browser, it is nowhere to be found. This is my request: 
+
+```javascript 
+
+    axios
+      .post(this.state.submitUrl, { username, password })
+        .then(res => {
+            //Everything here works fine
+            // Axios automatically puts your response body in res.data
+            const { token } = res.data;
+        if (token) {
+          alert(token);
+          } 
+          
+      })
+        .catch(err => {
+
+            // I want my error messages here. 
+
+      });
+```
+
+#### Figured it out!!! It turns out the error sent from the server is not  directly passed into the catch as I thought it was. In this example, the actual error message I am looking for is hidden inside err.response.data. The mistake I made when debugging this was console.logging Object.keys.call(err), which I should have realized wouldnt work. Doing it this way is just the same as saying Object.keys() with no arguments, but binding the err to the functions *this*. I'm just gonna brush that one off as a brain fart and move on.
+
+### Now that thats been sorted out, I need to actually *do* something with these responses. In the event a token is sent to the browser, I need to save it in local storage, then redirect the user to the homepage.  If an error is sent back, I think a little popup with the error message will do just fine. I also need to make sure the token is sent via headers to the server with each request to the server. I will need to do some configuration on my axios requests. 
