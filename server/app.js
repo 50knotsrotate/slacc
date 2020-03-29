@@ -14,6 +14,8 @@ const checkUniqueUsername = require("./middleware/checkUniqueUsername");
 const saveUser = require("./middleware/saveUser");
 const issueToken = require("./middleware/issueToken");
 
+const authenticateUser = require('./middleware/authenticateUser');
+
 const { CONNECTION_STRING } = process.env;
 //Using this for exposing the build folder to the client, which is where the finished HTML CSS and JS will live
 app.use(express.static(`${__dirname}/../build`));
@@ -48,7 +50,7 @@ app.post(
   issueToken
 );
 
-app.post('signin', checkFormComplete)
+app.post('/signin',authenticateUser, issueToken )
 
 // Not found
 app.use(function (req, res, next) {
