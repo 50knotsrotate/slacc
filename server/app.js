@@ -48,6 +48,8 @@ app.post(
   issueToken
 );
 
+app.post('signin', checkFormComplete)
+
 // Not found
 app.use(function (req, res, next) {
   const err = new Error('Page not found :(');
