@@ -137,7 +137,7 @@ export default class SignUp extends Component {
                   />
                   {this.state.authType === "Sign Up" && (
                     <p class="text-muted">
-                      * Must contain at least 8 characters and one number.
+                      * Must contain at least 8 characters with one number.
                     </p>
                   )}
                 </Col>
