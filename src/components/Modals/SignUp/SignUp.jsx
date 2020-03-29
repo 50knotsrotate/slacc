@@ -110,7 +110,7 @@ export default class SignUp extends Component {
                     name="password"
                   />
                   {this.state.authType === "Sign Up" && (
-                    <p style={{ cursor: "pointer" }} class="text-muted">
+                    <p class="text-muted">
                       * Must contain at least 8 characters and one number.
                     </p>
                   )}
