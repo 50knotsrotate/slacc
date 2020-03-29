@@ -43,7 +43,8 @@ export default class SignUp extends Component {
         const { token } = res.data;
         if (token) {
           window.localStorage.setItem("token", token);
-        }
+          }
+          this.props.push('/home')
       })
       .catch(err => {
           this.setState({
