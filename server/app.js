@@ -52,16 +52,20 @@ app.post(
   issueToken
 );
 
-app.post('/signin', authenticateUser, issueToken)
+app.post('/signin', authenticateUser, issueToken);
+
+// Protected routes
+app.use(checkToken)
 
 app.get("/token", checkToken, function (_req, res) {
-  res.sendStatus(200);
+  res.status(200).send()
  });
 
 // Proteted Routes
 
 app.get('/:team/:channel/messages', checkToken, function (req, res, next) {
   console.log('you has good credentials')
+  res.status(200).send()
  })
 
 // Not found
