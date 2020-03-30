@@ -76,8 +76,9 @@ export default class Home extends Component {
       timeout: 1000
     });
     instance.post(`/teams`, {teamName}).then(res => {
-      // console.log(res)
-      alert('success')
+      this.setState({
+        showNewTeamModal: false
+      })
     }).catch(err => { 
       alert('error')
     })

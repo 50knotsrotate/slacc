@@ -18,6 +18,7 @@ module.exports = function(req, res, next) {
 
       db.find_user(username).then(user => {
         if (user.length) {
+          req.username = username
           return next();
         } else {
           const err = new Error("Invalid token yo");

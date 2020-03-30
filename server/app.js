@@ -64,13 +64,10 @@ app.get("/token", function(_req, res) {
 app.post("/teams", function (req, res, next) {
   const db = req.app.get('db');
 
-  const { identifier } = req.headers
-  
-  console.log(identifier)
 
   const { teamName } = req.body;
-  db.create_team(teamName, identifier).then(teams => {
-    console.log(res);
+  db.create_team(teamName, req.username).then(teams => {
+    console.log(teams)
     return res.status(200).send(teams);
   }).catch(_err => { 
     console.log(_err)
