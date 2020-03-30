@@ -69,7 +69,6 @@ app.post("/teams", function (req, res, next) {
   db.create_team(teamName, req.username).then(teams => {
     return res.status(200).send(teams);
   }).catch(_err => { 
-    console.log(_err)
     const err = new Error('There was an error creating this team')
     err.statusCode = 400;
     return next(err)
