@@ -14,9 +14,9 @@ const checkUniqueUsername = require("./middleware/checkUniqueUsername");
 const saveUser = require("./middleware/saveUser");
 const issueToken = require("./middleware/issueToken");
 
-const authenticateUser = require('./middleware/authenticateUser');
+const authenticateUser = require("./middleware/authenticateUser");
 
-const checkToken = require('./middleware/checkToken');
+const checkToken = require("./middleware/checkToken");
 
 const { CONNECTION_STRING } = process.env;
 //Using this for exposing the build folder to the client, which is where the finished HTML CSS and JS will live
@@ -52,45 +52,48 @@ app.post(
   issueToken
 );
 
-app.post('/signin', authenticateUser, issueToken);
+app.post("/signin", authenticateUser, issueToken);
 
 // Protected routes
-app.use(checkToken)
+app.use(checkToken);
 
-app.get("/token", function (_req, res) {
-  res.status(200).send()
- });
-
-// Proteted Routes
-
-// Will be called for every endpoint from here on
-//app.use(checkToken);
-
-app.get('/teams', function (req, res, next) {
-  const db = req.app.get('db')
+app.get("/token", function(_req, res) {
+  res.status(200).send();
 });
 
-app.get('/:team/:channel/messages', checkToken, function (req, res, next) {
-  console.log('you has good credentials')
-  res.status(200).send()
- })
+app.post("/teams", function(req, res) {
+  const { teamName } = req.body;
+  db.create_team(teamName).then(res => {
+    console.log(res);
+    res.status(200).send(res);
+  });
+});
+
+app.get("/teams", function(req, res, next) {
+  const db = req.app.get("db");
+});
+
+app.get("/:team/:channel/messages", checkToken, function(req, res, next) {
+  console.log("you has good credentials");
+  res.status(200).send();
+});
 
 // Not found
-app.use(function (req, res, next) {
-  const err = new Error('Page not found :(');
+app.use(function(req, res, next) {
+  const err = new Error("Page not found :(");
   err.statusCode = 404;
-  return next(err)
+  return next(err);
 });
 
 //Error handler
-app.use(function (err, req, res, next) {
+app.use(function(err, req, res, next) {
   return res
     .status(err.statusCode || 500)
-    .send({ message: err.message || "Internal Server Error" })
+    .send({ message: err.message || "Internal Server Error" });
 });
 
 // Register the index route of your app that returns the HTML file
-app.get("*", function (_req, res) {
+app.get("*", function(_req, res) {
   res.sendFile(path.join(__dirname, "../build/index.html"));
 });
 
