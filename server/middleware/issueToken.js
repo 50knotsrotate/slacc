@@ -20,11 +20,11 @@ function issueToken(req, res, next) {
         though the tokens.
     */
 
-  bcrypt.hash(username, salt).then(hash => {
+  // bcrypt.hash(username, salt).then(hash => {
     /*  JWT config.  */
 
     const data = {
-      identifier: hash
+      identifier: username
     };
     const secret =
       "aTk0M3F5NXR1Zzh3cmlwZXN0amYyOTgzNHdpb1tldTVyanFmY2lwcmVkeGdudnJtY2llYWsnd2x3"; //Change this and put in .env
@@ -50,15 +50,15 @@ function issueToken(req, res, next) {
     };
     // End JWT config
 
-    const token = jwt.sign(payload, secret, options);
+  const token = jwt.sign(payload, secret, options);
 
       return res.status(200).send({ token });
       
-  }).catch(_err => { 
-      const err = new Error('There was a problem sending you a token')
-      err.statusCode = 500;
-      return next(err)
-  });
+  // }).catch(_err => { 
+  //     const err = new Error('There was a problem sending you a token')
+  //     err.statusCode = 500;
+  //     return next(err)
+  // });
 }
 
 module.exports = issueToken;

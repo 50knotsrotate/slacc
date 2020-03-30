@@ -54,7 +54,15 @@ app.post(
 
 app.post('/signin', authenticateUser, issueToken)
 
-app.get("/token", checkToken);
+app.get("/token", checkToken, function (_req, res) {
+  res.sendStatus(200);
+ });
+
+// Proteted Routes
+
+app.get('/:team/:channel/messages', checkToken, function (req, res, next) {
+  console.log('you has good credentials')
+ })
 
 // Not found
 app.use(function (req, res, next) {

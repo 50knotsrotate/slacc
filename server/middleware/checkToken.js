@@ -1,15 +1,30 @@
 const jwt = require("jsonwebtoken");
+const bcrypt = require('bcryptjs');
 
-module.exports = function(req, res) {
+module.exports = function(req, res, next) {
   const secret =
     "aTk0M3F5NXR1Zzh3cmlwZXN0amYyOTgzNHdpb1tldTVyanFmY2lwcmVkeGdudnJtY2llYWsnd2x3";
-  const { token } = req.headers;
-  if (token) {
-      const decoded = jwt.verify(token, secret);
-     return res.status(200).send()
+    const headers = req.headers;
+
+    const { identifier } = headers || null;
+    
+    if (identifier) {
+        const db = req.app.get('db');
+
+        const decoded = jwt.verify(identifier, secret);
+        
+        if (decoded) {
+            
+            return next()
+        } else {
+            const err = new Error('Invalid token')
+            err.statusCode = 400;
+            return next(err);
+         }
+
 r  } else {
     const err = new Error("No JWT provided");
     err.statusCode = 400;
-    return res.status(400).send(err);
+    return next(err)
   }
 };

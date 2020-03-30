@@ -27,7 +27,7 @@ class App extends React.Component {
      const instance = axios.create({
        baseURL: "http://localhost:80",
        timeout: 1000,
-       headers: { token: identifier }
+       headers: { identifier }
      });
 
      instance

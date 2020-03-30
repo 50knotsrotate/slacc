@@ -12,6 +12,7 @@ import Form from "react-bootstrap/Form";
 import SignUp from "./components/Modals/SignUp/SignUp";
 
 import Landing from "./components/Landing/Landing";
+import Home from './components/Home/Home';
 
 import axios from "axios";
 
@@ -22,11 +23,11 @@ import Navbar from "./components/Navbar/Navbar";
 
 function App() {
   return (
-    <div>
+    <div className = 'app'>
       <Router>
         <Switch>
           <Route exact path="/" component={Landing} />
-          <Route path="/home" render={() => "Home"} />
+          <Route path="/home" component={Home} />
         </Switch>
       </Router>
     </div>
