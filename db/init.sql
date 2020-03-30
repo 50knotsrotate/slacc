@@ -32,3 +32,9 @@ create table messages
     body varchar(250),
     channel_id integer references channels(id)
 );
+
+create table TeamMembers
+(
+    username varchar(25) references users(username),
+    team_name varchar(25) references teams(name)
+);
