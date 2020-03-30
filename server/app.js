@@ -61,6 +61,20 @@ app.get("/token", function(_req, res) {
   res.status(200).send();
 });
 
+app.get('/teams', function (req, res) {
+  const { query } = req.query;
+  const db = req.app.get('db');
+
+  db.get_all_teams().then(res => { 
+    const filtered = res.data.filter(team => team.name.includes(query))
+    res.status(200).send(filtered);
+  }).catch(err => { 
+    const err = new Error('Oops someting went wrong')
+    err.statusCode = 400;
+    return next(err)
+  })
+});
+
 app.post("/teams", function (req, res, next) {
   const db = req.app.get('db');
 
@@ -75,7 +89,9 @@ app.post("/teams", function (req, res, next) {
   })
 });
 
-app.get("/teams", function(req, res, next) {
+
+
+app.get("/user/teams", function(req, res, next) {
   const db = req.app.get("db");
   db.get_user_teams(req.username).then(teams => { 
     res.status(200).send(teams);
@@ -84,16 +100,18 @@ app.get("/teams", function(req, res, next) {
   })
 });
 
-app.put('/teams', function (req, res, next) { 
+app.post('/user/teams', function (req, res, next) { 
   const db = req.app.get('db');
   const { teamName } = req.body;
-  db.check_team_exists(teamName).then(team => { 
-    if (team.length) { 
-        db.join_team(teamName, req.username).then(response => {
-          console.log(response);
-        });
-    }
-  })
+  // db.check_team_exists(teamName).then(team => { 
+  //   if (team.length) {
+  //     db.join_team(teamName, req.username).then(response => {
+  //       console.log(response);
+  //     }).catch(err => { 
+
+  //     })
+  //   }
+  // })
 })
 
 app.get("/:team/:channel/messages", checkToken, function(req, res, next) {

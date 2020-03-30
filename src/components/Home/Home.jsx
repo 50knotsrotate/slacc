@@ -35,7 +35,7 @@ export default class Home extends Component {
     });
 
     instance
-      .get(`/teams`)
+      .get(`/user/teams`)
       .then(res => {
         const teams = res.data
         this.setState({
