@@ -1,3 +1,4 @@
+drop table if exists TeamMembers;
 drop table if exists messages;
 drop table if exists channels;
 drop table if exists teams;
@@ -14,7 +15,7 @@ create table teams
 (
     id serial primary key,
     name varchar(25) not null UNIQUE,
-    owner integer references users(id)
+    owner varchar(25) references users(username)
 );
 
 create table channels
