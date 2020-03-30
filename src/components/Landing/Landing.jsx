@@ -9,7 +9,7 @@ import Image from "react-bootstrap/Image";
 import Form from "react-bootstrap/Form";
 import SignUp from "../Modals/SignUp/SignUp";
 
-import axios from 'axios';
+import axios from "axios";
 
 import Navbar from "../Navbar/Navbar";
 
@@ -19,26 +19,28 @@ class App extends React.Component {
     this.state = {
       showModal: false
     };
-  };
-
-  componentDidMount = () => { 
-     const identifier = window.localStorage.getItem("token");
-
-     const instance = axios.create({
-       baseURL: "http://localhost:80",
-       timeout: 1000,
-       headers: { token: identifier }
-     });
-
-     instance
-       .get("/token")
-       .then(res => {
-         this.props.history.push("/home");
-       })
-       .catch(err => {
-         console.log(err.response.data);
-       });
   }
+
+  componentDidMount = () => {
+    const identifier = window.localStorage.getItem("token");
+
+    if (identifier) {
+      const instance = axios.create({
+        baseURL: "http://localhost:80",
+        timeout: 1000,
+        headers: { identifier }
+      });
+
+      instance
+        .get("/token")
+        .then(res => {
+          this.props.history.push("/home");
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    }
+  };
 
   toggleModal = () => {
     this.setState({

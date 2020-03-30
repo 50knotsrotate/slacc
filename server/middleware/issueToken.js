@@ -20,45 +20,39 @@ function issueToken(req, res, next) {
         though the tokens.
     */
 
-  bcrypt.hash(username, salt).then(hash => {
-    /*  JWT config.  */
+  // bcrypt.hash(username, salt).then(hash => {
+  /*  JWT config.  */
 
-    const data = {
-      identifier: hash
-    };
-    const secret =
-      "aTk0M3F5NXR1Zzh3cmlwZXN0amYyOTgzNHdpb1tldTVyanFmY2lwcmVkeGdudnJtY2llYWsnd2x3"; //Change this and put in .env
+  const data = {
+    identifier: username
+  };
+  const secret =
+    "aTk0M3F5NXR1Zzh3cmlwZXN0amYyOTgzNHdpb1tldTVyanFmY2lwcmVkeGdudnJtY2llYWsnd2x3"; //Change this and put in .env
 
-    const iat = Date.now() / 1000;
+  const iat = Date.now() / 1000;
 
-    const jwtid = Math.random()
-      .toString(36)
-      .substring(7); // Copied from https://www.js-tutorials.com/nodejs-tutorial/user-authentication-using-jwt-json-web-token-node-js/
+  const jwtid = Math.random()
+    .toString(36)
+    .substring(7); // Copied from https://www.js-tutorials.com/nodejs-tutorial/user-authentication-using-jwt-json-web-token-node-js/
 
-    const audience = "test"; // I think I have to make this the domain of the app, but this will be fine for now.
+  const audience = "test"; // I think I have to make this the domain of the app, but this will be fine for now.
 
-    const payload = {
-      iat,
-      jwtid,
-      audience,
-      data
-    };
+  const payload = {
+    iat,
+    jwtid,
+    audience,
+    data
+  };
 
-    const options = {
-      algorithm: "HS256",
-      expiresIn: "1h"
-    };
-    // End JWT config
+  const options = {
+    algorithm: "HS256",
+    expiresIn: "1h"
+  };
+  // End JWT config
 
-    const token = jwt.sign(payload, secret, options);
+  const token = jwt.sign(payload, secret, options);
 
-      return res.status(200).send({ token });
-      
-  }).catch(_err => { 
-      const err = new Error('There was a problem sending you a token')
-      err.statusCode = 500;
-      return next(err)
-  });
+  return res.status(200).send({ token });
 }
 
 module.exports = issueToken;

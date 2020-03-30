@@ -52,9 +52,28 @@ app.post(
   issueToken
 );
 
-app.post('/signin', authenticateUser, issueToken)
+app.post('/signin', authenticateUser, issueToken);
 
-app.get("/token", checkToken);
+// Protected routes
+app.use(checkToken)
+
+app.get("/token", function (_req, res) {
+  res.status(200).send()
+ });
+
+// Proteted Routes
+
+// Will be called for every endpoint from here on
+//app.use(checkToken);
+
+app.get('/teams', function (req, res, next) {
+  const db = req.app.get('db')
+});
+
+app.get('/:team/:channel/messages', checkToken, function (req, res, next) {
+  console.log('you has good credentials')
+  res.status(200).send()
+ })
 
 // Not found
 app.use(function (req, res, next) {
