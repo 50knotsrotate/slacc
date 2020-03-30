@@ -250,3 +250,25 @@ app.use(function (err, req, res, next) {
 
 ### Now that thats been sorted out, I need to actually *do* something with these responses. In the event a token is sent to the browser, I need to save it in local storage, then redirect the user to the homepage.  If an error is sent back, I think a little popup with the error message will do just fine. I also need to make sure the token is sent via headers to the server with each request to the server. I will need to do some configuration on my axios requests. 
 
+
+
+#### Another challenge here. I need a way to get all all the teams a user is a part of, so I can create a dropdown with the teams a user is part of, and also add the ability to actually *join* a team, but right now, I have no way of doing that. I'm going to need to make a table to associate a user with one or more teams. 
+
+```sql
+    create table TeamMembers(
+        username integer references users(username),
+        team_name integer references teams(name)
+    )
+```
+#### Easy peasy. Now I need queries for a user to both join and create teams.
+
+```sql 
+insert into TeamMembers(username, team_name)
+values('patrick', 'Some team name');
+```
+
+```sql
+select * from TeamMembers t where t.username = 'username' 
+```
+
+#### I can see just one issue with doing it this way. What happens if a user goes to join a team, but tries to join a team that doesnt exists? I could put whatever I want into this table right now. My solution is going to be to check to see if a team with that name exists. If it does, create the record, if not, send an error back. Maybe I can come up with a better query later, but this will do for now. 

@@ -64,7 +64,11 @@ app.get("/token", function (_req, res) {
 // Proteted Routes
 
 // Will be called for every endpoint from here on
-// app.use(checkToken);
+//app.use(checkToken);
+
+app.get('/teams', function (req, res, next) {
+  const db = req.app.get('db')
+});
 
 app.get('/:team/:channel/messages', checkToken, function (req, res, next) {
   console.log('you has good credentials')
