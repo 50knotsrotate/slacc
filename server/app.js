@@ -16,6 +16,8 @@ const issueToken = require("./middleware/issueToken");
 
 const authenticateUser = require('./middleware/authenticateUser');
 
+const checkToken = require('./middleware/checkToken');
+
 const { CONNECTION_STRING } = process.env;
 //Using this for exposing the build folder to the client, which is where the finished HTML CSS and JS will live
 app.use(express.static(`${__dirname}/../build`));
@@ -50,7 +52,9 @@ app.post(
   issueToken
 );
 
-app.post('/signin',authenticateUser, issueToken )
+app.post('/signin', authenticateUser, issueToken)
+
+app.get("/token", checkToken);
 
 // Not found
 app.use(function (req, res, next) {
@@ -61,15 +65,13 @@ app.use(function (req, res, next) {
 
 //Error handler
 app.use(function (err, req, res, next) {
-  console.log('err')
-  console.log(err)
   return res
     .status(err.statusCode || 500)
     .send({ message: err.message || "Internal Server Error" })
 });
 
 // Register the index route of your app that returns the HTML file
-app.get("*", function(_req, res) {
+app.get("*", function (_req, res) {
   res.sendFile(path.join(__dirname, "../build/index.html"));
 });
 

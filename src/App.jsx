@@ -1,6 +1,6 @@
 /* tslint:disable */
 import * as React from "react";
-import './App.css'
+import "./App.css";
 import io from "socket.io-client";
 import Jumbotron from "react-bootstrap/Jumbotron";
 import Container from "react-bootstrap/Container";
@@ -11,14 +11,16 @@ import Image from "react-bootstrap/Image";
 import Form from "react-bootstrap/Form";
 import SignUp from "./components/Modals/SignUp/SignUp";
 
-import Landing from './components/Landing/Landing'
+import Landing from "./components/Landing/Landing";
+
+import axios from "axios";
 
 import { BrowserRouter as Router } from "react-router-dom";
-import { Switch, Route } from 'react-router'
+import { Switch, Route } from "react-router";
 
-import Navbar from './components/Navbar/Navbar';
+import Navbar from "./components/Navbar/Navbar";
 
-export default function App(props) {
+function App() {
   return (
     <div>
       <Router>
@@ -31,4 +33,4 @@ export default function App(props) {
   );
 }
 
-
+export default App;
