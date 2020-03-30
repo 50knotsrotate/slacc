@@ -3,9 +3,9 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import ListGroup from "react-bootstrap/ListGroup";
-import Dropdown from 'react-bootstrap/Dropdown'
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/Buttongroup';
+import Dropdown from "react-bootstrap/Dropdown";
+import Button from "react-bootstrap/Button";
+import ButtonGroup from "react-bootstrap/Buttongroup";
 import io from "socket.io-client";
 import axios from "axios";
 
@@ -22,24 +22,17 @@ export default class Home extends Component {
   }
 
   componentDidMount = () => {
-    const identifier = window.localStorage.getItem("token");
+      const identifier = window.localStorage.getItem("token");
 
-    if (identifier) {
       const instance = axios.create({
-        baseURL: "http://localhost:80",
+        baseURL: `http://localhost:80`,
         headers: { identifier },
         timeout: 1000
       });
 
-      instance
-        .get("/token")
-        .then(res => {
-          this.props.history.push("/home");
-        })
-        .catch(err => {
-        this.props.history.push('/')
-        });
-    }
+      instance.get(`/teams`).then(res => {
+        // console.log(res)
+      });
   };
 
   getChannelMessages = channel => {
@@ -54,6 +47,12 @@ export default class Home extends Component {
 
     instance.get(`/${channel}/poop/messages`).then(res => {
       // console.log(res)
+    });
+  };
+
+  createTeam = teamName => {
+    axios.post("http://localhost:80/teams").then(res => {
+      alert(res);
     });
   };
 
@@ -82,8 +81,11 @@ export default class Home extends Component {
                 </Dropdown.Item>
                 <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
                 <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                <Dropdown.Item className = 'bg-info text-light' href="#/action-3">
-                  <span>Add Another Team + </span>
+                <Dropdown.Item className="bg-info text-light w-100" href="#/action-3">
+                 Join Team +
+                </Dropdown.Item>
+                <Dropdown.Item className="bg-success text-light w-100" href="#/action-3">
+                    Create New Team +
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -101,6 +103,7 @@ export default class Home extends Component {
                   </ListGroup.Item>
                 );
               })}
+              <Button>Add New Channel +</Button>
             </ListGroup>
           </Col>
           <Col sm={8}>
