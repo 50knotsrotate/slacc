@@ -1,3 +1,4 @@
+drop table if exists TeamMembers;
 drop table if exists messages;
 drop table if exists channels;
 drop table if exists teams;
