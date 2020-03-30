@@ -64,7 +64,7 @@ export default class SignUp extends Component {
       });
     } else {
       this.setState({
-        authType: "Sign In",
+        authType: "Sign Up",
         submitUrl: "http://localhost:80/signup"
       });
     }
