@@ -1,0 +1,1 @@
+select * from teams t where t.name = $1;

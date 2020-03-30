@@ -87,9 +87,13 @@ app.get("/teams", function(req, res, next) {
 app.put('/teams', function (req, res, next) { 
   const db = req.app.get('db');
   const { teamName } = req.body;
-  db.join_team(teamName, req.username).then(response => {
-    console.log(response)
-  });
+  db.check_team_exists(teamName).then(team => { 
+    if (team.length) { 
+        db.join_team(teamName, req.username).then(response => {
+          console.log(response);
+        });
+    }
+  })
 })
 
 app.get("/:team/:channel/messages", checkToken, function(req, res, next) {
