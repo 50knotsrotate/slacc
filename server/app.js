@@ -67,7 +67,6 @@ app.post("/teams", function (req, res, next) {
 
   const { teamName } = req.body;
   db.create_team(teamName, req.username).then(teams => {
-    console.log(teams)
     return res.status(200).send(teams);
   }).catch(_err => { 
     console.log(_err)
@@ -79,6 +78,11 @@ app.post("/teams", function (req, res, next) {
 
 app.get("/teams", function(req, res, next) {
   const db = req.app.get("db");
+  db.get_user_teams(req.username).then(teams => { 
+    res.status(200).send(teams);
+  }).catch(err => { 
+    res.status(400).send('oh noes')
+  })
 });
 
 app.get("/:team/:channel/messages", checkToken, function(req, res, next) {

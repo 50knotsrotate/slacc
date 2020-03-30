@@ -1,0 +1,1 @@
+select * from TeamMembers tm where tm.username = $1; 
