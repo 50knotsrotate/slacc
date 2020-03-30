@@ -6,6 +6,8 @@ import ListGroup from "react-bootstrap/ListGroup";
 import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/Buttongroup";
+
+import NewTeam from "../Modals/NewTeam/NewTeam";
 import io from "socket.io-client";
 import axios from "axios";
 
@@ -17,6 +19,7 @@ export default class Home extends Component {
       channels: [],
       hoverStateItem: null,
       messages: [],
+      showNewTeamModal: false,
       teams: []
     };
   }
@@ -30,9 +33,14 @@ export default class Home extends Component {
       timeout: 1000
     });
 
-    instance.get(`/teams`).then(res => {
-      // console.log(res)
-    });
+    instance
+      .get(`/token`)
+      .then(res => {
+        return;
+      })
+      .catch(err => {
+        this.props.history.push("/");
+      });
   };
 
   getChannelMessages = channel => {
@@ -44,30 +52,35 @@ export default class Home extends Component {
       headers: { identifier },
       timeout: 1000
     });
-
-    createNewTeam = () => {
-      const identifier = window.localStorage.getItem("token");
-
-      const instance = axios.create({
-        baseURL: `http://localhost:80`,
-        headers: { identifier },
-        timeout: 1000
-      });
-
-      instance.post(`/teams`).then(res => {
-        // console.log(res)
-      });
-    };
-
-    instance.get(`/${channel}/poop/messages`).then(res => {
-      // console.log(res)
-    });
   };
 
+  // createNewTeam = () => {
+  //   const identifier = window.localStorage.getItem("token");
+
+  //   const instance = axios.create({
+  //     baseURL: `http://localhost:80`,
+  //     headers: { identifier },
+  //     timeout: 1000
+  //   });
+
+  //   instance.post(`/teams`).then(res => {
+  //     // console.log(res)
+  //   });
+  // };
+
   createTeam = teamName => {
-    axios.post("http://localhost:80/teams").then(res => {
-      alert(res);
+    const identifier = window.localStorage.getItem("token");
+    const instance = axios.create({
+      baseURL: `http://localhost:80`,
+      headers: { identifier },
+      timeout: 1000
     });
+    instance.post(`/teams`, {teamName}).then(res => {
+      // console.log(res)
+      alert('success')
+    }).catch(err => { 
+      alert('error')
+    })
   };
 
   render() {
@@ -104,6 +117,9 @@ export default class Home extends Component {
                 <Dropdown.Item
                   className="bg-success text-light w-100"
                   href="#/action-3"
+                  onClick={() => {
+                    this.setState({ showNewTeamModal: true });
+                  }}
                 >
                   Create New Team +
                 </Dropdown.Item>
@@ -130,6 +146,9 @@ export default class Home extends Component {
             <h1>This is the rest of home</h1>
           </Col>
         </Row>
+
+        {/* MODALS */}
+        <NewTeam show={this.state.showNewTeamModal} submit={this.createTeam} />
       </Container>
     );
   }

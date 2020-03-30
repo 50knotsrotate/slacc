@@ -61,12 +61,23 @@ app.get("/token", function(_req, res) {
   res.status(200).send();
 });
 
-app.post("/teams", function(req, res) {
+app.post("/teams", function (req, res, next) {
+  const db = req.app.get('db');
+
+  const { identifier } = req.headers
+  
+  console.log(identifier)
+
   const { teamName } = req.body;
-  db.create_team(teamName).then(res => {
+  db.create_team(teamName, identifier).then(teams => {
     console.log(res);
-    res.status(200).send(res);
-  });
+    return res.status(200).send(teams);
+  }).catch(_err => { 
+    console.log(_err)
+    const err = new Error('There was an error creating this team')
+    err.statusCode = 400;
+    return next(err)
+  })
 });
 
 app.get("/teams", function(req, res, next) {
