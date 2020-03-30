@@ -61,14 +61,14 @@ app.get("/token", function(_req, res) {
   res.status(200).send();
 });
 
-app.get('/teams', function (req, res) {
+app.get('/teams', function (req, res, next) {
   const { query } = req.query;
   const db = req.app.get('db');
 
-  db.get_all_teams().then(res => { 
-    const filtered = res.data.filter(team => team.name.includes(query))
+  db.get_all_teams().then(response => { 
+    const filtered = response.filter(team => team.name.includes(query))
     res.status(200).send(filtered);
-  }).catch(err => { 
+  }).catch(_err => { 
     const err = new Error('Oops someting went wrong')
     err.statusCode = 400;
     return next(err)

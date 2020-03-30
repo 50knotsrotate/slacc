@@ -9,6 +9,7 @@ import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/Buttongroup";
 
 import NewTeam from "../Modals/NewTeam/NewTeam";
+import JoinTeam from '../Modals/JoinTeam/JoinTeam';
 import io from "socket.io-client";
 import axios from "axios";
 
@@ -20,6 +21,7 @@ export default class Home extends Component {
       channels: [],
       hoverStateItem: null,
       messages: [],
+      showJoinTeamModal: false,
       showNewTeamModal: false,
       teams: []
     };
@@ -47,8 +49,18 @@ export default class Home extends Component {
       });
   };
 
+  joinTeam = query => { 
+    const identifier = window.localStorage.getItem("token");
+
+    const instance = axios.create({
+      baseURL: `http://localhost:80`,
+      headers: { identifier },
+      timeout: 1000
+    });
+    axios.get(`/teams?query=${query}`)
+  }
+
   getChannelMessages = channel => {
-    alert(channel);
     const identifier = window.localStorage.getItem("token");
 
     const instance = axios.create({
@@ -92,7 +104,7 @@ console.log(this.state.teams)
     return (
       <Container fluid>
         <Row>
-          <Col className="bg-primary" sm={4}>
+          <Col className="bg-primary" sm={3}>
             <Dropdown className="text-center">
               <Dropdown.Toggle
                 className="border-bottom"
@@ -106,6 +118,7 @@ console.log(this.state.teams)
                 <Dropdown.Item
                   className="bg-info text-light w-100"
                   href="#/action-3"
+                  onClick={() => this.setState({showJoinTeamModal: true})}
                 >
                   Join Team +
                 </Dropdown.Item>
@@ -137,13 +150,14 @@ console.log(this.state.teams)
               <Button>Add New Channel +</Button>
             </ListGroup>
           </Col>
-          <Col sm={8}>
+          <Col sm={9}>
             <h1>This is the rest of home</h1>
           </Col>
         </Row>
 
         {/* MODALS */}
         <NewTeam show={this.state.showNewTeamModal} submit={this.createTeam} />
+        <JoinTeam show={this.state.showJoinTeamModal} />
       </Container>
     );
   }
